@@ -2,18 +2,25 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QTimer>
+#include <QSlider>
 #include "agent.h"
 
 GraphViewer::GraphViewer(QWidget *parent) :
     QWidget(parent)
 {
     QTimer *timer = new QTimer();
-    timer->setInterval(1);
-    connect(timer, SIGNAL(timeout()), this, SLOT(update()));
+    timer->setInterval(1000);
+    slider = new QSlider(Qt::Horizontal, this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(oneStep()));
+    connect(slider, SIGNAL(valueChanged(int)), this, SLOT(update()));
     timer->start();
     _elapsedTimer.start();
 }
 
+void GraphViewer::oneStep()
+{
+    slider->setValue(slider->value()+1);
+}
 
 void GraphViewer::paintEvent(QPaintEvent * event)
 {
@@ -30,16 +37,16 @@ void GraphViewer::paintEvent(QPaintEvent * event)
     painter.setBrush(QBrush(QColor(200,200,200,255)));
     foreach(Agent* agent, agents)
     {
-        painter.drawEllipse(agent->position.toPoint(), 2,2);
+        painter.drawEllipse(agent->positions[0].toPoint(), 2,2);
     }
     painter.setPen(QPen(QColor(0,0,0,80)));
     foreach(Agent* agent, agents)
     {
         foreach(Agent* neig, agents)
         {
-            if(agent->position != neig->position && agent->position.distanceToPoint(neig->position) < 25)
+            if(agent->positions[0] != neig->positions[0] && agent->positions[0].distanceToPoint(neig->positions[0]) < 25)
             {
-                painter.drawLine(agent->position.toPoint(), neig->position.toPoint());
+                painter.drawLine(agent->positions[0].toPoint(), neig->positions[0].toPoint());
             }
         }
     }

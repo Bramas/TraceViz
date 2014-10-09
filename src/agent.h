@@ -9,9 +9,9 @@ class Agent : public QObject
     Q_OBJECT
 public:
     Agent(QVector2D startPosition = QVector2D());
-    QVector2D destination;
     qreal speed;
     QMap<int, QVector2D> positions;
+    QVector2D destination;
 public slots:
     void tick(quint64 elapsed);
 };

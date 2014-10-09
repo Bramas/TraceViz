@@ -5,6 +5,7 @@
 #include <QList>
 #include <QElapsedTimer>
 class Agent;
+class QSlider;
 
 class GraphViewer : public QWidget
 {
@@ -20,8 +21,10 @@ protected:
 signals:
 
 public slots:
+    void oneStep();
 
 private:
+    QSlider *slider;
     QElapsedTimer _elapsedTimer;
 
 };
